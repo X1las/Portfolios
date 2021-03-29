@@ -15,10 +15,10 @@ public class MatrixGraph {
         matrixweightgraph[from][to]=weight;
     }
     public void MSTPrims(){
-        int[] Distance =new int[matrixegdegraph.length];
+        int[] Distance = new int[matrixegdegraph.length];
         int[] predecessor = new int[matrixegdegraph.length];
-        boolean[] visited =  new boolean[matrixegdegraph.length];
-        MinHeap<Pair> Q =new MinHeap<>();
+        boolean[] visited = new boolean[matrixegdegraph.length];
+        MinHeap<Pair> Q = new MinHeap<>();
         PriorityQueue<Pair> PQ = new PriorityQueue<>(); // offer (add) poll (extactmin)
 
         ArrayList<Pair> VertexPairs=new ArrayList<>();
@@ -29,7 +29,7 @@ public class MatrixGraph {
             Distance[0]=0;
         for(int i=0;i<matrixegdegraph.length;i++) {
             VertexPairs.add(new Pair(Distance[i], i));
-            Q.Insert(VertexPairs.get(i));
+            Q.insert(VertexPairs.get(i));
         }
         int MST=0;
         while(!Q.isEmpty()){

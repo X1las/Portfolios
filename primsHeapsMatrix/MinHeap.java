@@ -34,7 +34,7 @@ public class MinHeap<T extends Comparable<T> >{
         positionTable.put(minheap.get(pos1),pos1);
         positionTable.put(minheap.get(pos2),pos2);
     }
-    public void Insert(T item){
+    public void insert(T item){ // offer
         minheap.add(item);
         positionTable.put(item,size);
         size++;
@@ -74,7 +74,7 @@ public class MinHeap<T extends Comparable<T> >{
             }
         }
     }
-    public T extractMin(){
+    public T extractMin(){ // poll
         T min = minheap.get(0);
         minheap.set(0, minheap.get(size-1));
         positionTable.put(minheap.get(0),0);

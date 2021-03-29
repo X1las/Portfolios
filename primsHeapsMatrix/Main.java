@@ -7,50 +7,14 @@ public class Main {
 
     public static void main(String[] args) {
 
-
-        
-
-
         AdjacencyGraph ag = new AdjacencyGraph();
         ag.createFromFile("townsAndDists.csv");
         ag.PrintGraph();
+        //ag.MSTPrims();
         ArrayList<Vertex> likj = ag.getVertices();
         for (Vertex name : likj){
             System.out.println(name.getName());
         }
         System.out.println(likj.size());
-       /*
-        ArrayList<String[]> connections = csvReader("townsAndDists.csv");
-        for (String[] connection : connections){
-            adjacencyGraph.addEdge(new Vertex(connection[0]), new Vertex(connection[1]), Integer.parseInt(connection[2]));
-        }*/
-    }
-/*
-        public static ArrayList<String[]> csvReader(String file){
-        ArrayList<Vertex> verteces = new ArrayList<Vertex>();                
-        String line = "";
-        String splitBy = ",";
-        ArrayList<String[]> connections = new ArrayList<>();
-        try {
-            // parsing a CSV file into BufferedReader class constructor
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            while ((line = br.readLine()) != null) // returns a Boolean value
-            {
-                String[] connection = line.split(splitBy); // use comma as separator
-                //connection[[town1, town2, dist],[town1, town2, dist] ]
-                connections.add(connection);
-                
-            }
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        for(String[] connection : connections){
-            System.out.print(Arrays.toString(connection));
-            System.out.println();
-        }
-        return connections;
-        //System.out.println(connections);
-    }*/
 }
