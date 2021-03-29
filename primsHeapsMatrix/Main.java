@@ -6,16 +6,24 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
-       AdjacencyGraph adjacencyGraph = new AdjacencyGraph();
+
+
+        
+
+
+        AdjacencyGraph adjacencyGraph = new AdjacencyGraph();
+        adjacencyGraph.createFromFile("townsAndDists.csv");
+        adjacencyGraph.PrintGraph();
+       /*
         ArrayList<String[]> connections = csvReader("townsAndDists.csv");
         for (String[] connection : connections){
             adjacencyGraph.addEdge(new Vertex(connection[0]), new Vertex(connection[1]), Integer.parseInt(connection[2]));
-        }
+        }*/
     }
+/*
         public static ArrayList<String[]> csvReader(String file){
-
-                
-                String line = "";
+        ArrayList<Vertex> verteces = new ArrayList<Vertex>();                
+        String line = "";
         String splitBy = ",";
         ArrayList<String[]> connections = new ArrayList<>();
         try {
@@ -27,16 +35,17 @@ public class Main {
                 //connection[[town1, town2, dist],[town1, town2, dist] ]
                 connections.add(connection);
                 
-            
+            }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         for(String[] connection : connections){
             System.out.print(Arrays.toString(connection));
             System.out.println();
         }
         return connections;
         //System.out.println(connections);
-    }
+    }*/
 }
