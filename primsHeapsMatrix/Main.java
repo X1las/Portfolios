@@ -15,6 +15,9 @@ public class Main {
         ag.createFromFile("townsAndDists.csv");
         ag.PrintGraph();
         ArrayList<Vertex> likj = ag.getVertices();
+        for (Vertex name : likj){
+            System.out.println(name.getName());
+        }
         System.out.println(likj.size());
        /*
         ArrayList<String[]> connections = csvReader("townsAndDists.csv");
