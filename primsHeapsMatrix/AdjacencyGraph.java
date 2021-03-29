@@ -60,7 +60,7 @@ public class AdjacencyGraph {
             {
                 
                 String[] connection = line.split(splitBy); // use comma as separator
-                /*
+                
                 Vertex tempA = null;
                 Vertex tempB = null;
                 boolean tA = true;
@@ -91,12 +91,13 @@ public class AdjacencyGraph {
 
                 if (tempA!=null && tempB!=null) 
                 {         
-                    System.out.println(vertices);
+                    //System.out.println(vertices);
                     addEdge(tempA,tempB,Integer.valueOf(connection[2]));
                 }
-                */
+                
                 // connection[[town1, town2, dist],[town1, town2, dist] ]
-                tempVert.clear();
+                
+                /*tempVert.clear();
                 tempVert.addAll(vertices);
                 //connections.add(connection);
                 if (this.vertices.isEmpty()) {
@@ -139,7 +140,7 @@ public class AdjacencyGraph {
                 }
                 add1 = false; add2 = false;
                 addEdge(currentFrom, currentTo, Integer.valueOf(connection[2]));
-                
+             */   
             }
 
         } catch (IOException e) {
