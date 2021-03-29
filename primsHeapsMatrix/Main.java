@@ -11,9 +11,11 @@ public class Main {
         
 
 
-        AdjacencyGraph adjacencyGraph = new AdjacencyGraph();
-        adjacencyGraph.createFromFile("townsAndDists.csv");
-        adjacencyGraph.PrintGraph();
+        AdjacencyGraph ag = new AdjacencyGraph();
+        ag.createFromFile("townsAndDists.csv");
+        ag.PrintGraph();
+        ArrayList<Vertex> likj = ag.getVertices();
+        System.out.println(likj.size());
        /*
         ArrayList<String[]> connections = csvReader("townsAndDists.csv");
         for (String[] connection : connections){
