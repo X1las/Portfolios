@@ -51,8 +51,8 @@ public class AdjacencyGraph {
         ArrayList<Vertex> tempVert = new ArrayList<>();
         ArrayList<String[]> connections = new ArrayList<>();
         ArrayList<Vertex> connections2 = new ArrayList<>();
-        boolean add1 = true;
-        boolean add2 = true;
+        boolean add1 = false;
+        boolean add2 = false;
         try {
             // parsing a CSV file into BufferedReader class constructor
             BufferedReader br = new BufferedReader(new FileReader(file));
@@ -60,8 +60,9 @@ public class AdjacencyGraph {
             {
                 
                 String[] connection = line.split(splitBy); // use comma as separator
-                Vertex tempA;
-                Vertex tempB;
+                /*
+                Vertex tempA = null;
+                Vertex tempB = null;
                 boolean tA = true;
                 boolean tB = true;
                 for (Vertex vertex : vertices) 
@@ -87,10 +88,13 @@ public class AdjacencyGraph {
                     tempB = new Vertex(connection[1]);
                     vertices.add(tempB);
                 }
-                System.out.println(vertices);
-                addEdge(tempA,tempB,Integer.valueOf(connection[2]));
-                
-                /*
+
+                if (tempA!=null && tempB!=null) 
+                {         
+                    System.out.println(vertices);
+                    addEdge(tempA,tempB,Integer.valueOf(connection[2]));
+                }
+                */
                 // connection[[town1, town2, dist],[town1, town2, dist] ]
                 tempVert.clear();
                 tempVert.addAll(vertices);
@@ -103,7 +107,7 @@ public class AdjacencyGraph {
                     vertices.add(currentTo);
                 } else {
                     
-                    for (Vertex vertex : tempVert) {
+                    for (Vertex vertex : vertices) {
                         
                         if (vertex.getName().equals(connection[0])) {
                             System.out.println("test");
@@ -112,8 +116,6 @@ public class AdjacencyGraph {
                         } else {
                             currentFrom = new Vertex(connection[0]);
                             add1 = true;
-                            
-                            
                             
                         }
                         if (vertex.getName().equals(connection[1])) {
@@ -127,6 +129,7 @@ public class AdjacencyGraph {
                             
                         }
                     } if (add1 == true){
+                        System.out.println("KSJDHFKSJDFHKSJDFH");
                         vertices.add(currentFrom);
                     } if (add2 == true){
                         vertices.add(currentTo);
@@ -134,8 +137,9 @@ public class AdjacencyGraph {
                     
                     
                 }
+                add1 = false; add2 = false;
                 addEdge(currentFrom, currentTo, Integer.valueOf(connection[2]));
-                */
+                
             }
 
         } catch (IOException e) {
