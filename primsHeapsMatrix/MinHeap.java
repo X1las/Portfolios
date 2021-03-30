@@ -26,6 +26,7 @@ public class MinHeap<T extends Comparable<T> >{
     private int rightChild(int pos){
         return pos*2 +2;
     }
+ 
     private void swap(int pos1, int pos2){
         T dummy= minheap.get(pos1);
 
@@ -81,5 +82,11 @@ public class MinHeap<T extends Comparable<T> >{
         size--;
         increasekey(0);
         return min;
+    }
+    public void printHeap()
+    {   
+        for (T node : minheap)
+            System.out.println(node.toString());
+            
     }
 }

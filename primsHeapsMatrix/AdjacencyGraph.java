@@ -26,10 +26,12 @@ public class AdjacencyGraph {
         MinHeap<Pair> minheap = new MinHeap<>();
         
         for (Vertex vertex : vertices){
-            minheap.insert(new Pair(vertex.dist, vertex));
+            Pair pair = new Pair(vertex.dist, vertex);
+            minheap.insert(pair);
         }
-
-        System.out.println(minheap);
+        
+        minheap.printHeap();
+        
         
 
         /*
@@ -248,9 +250,6 @@ class Edge {
     }
 }
 
-
-
-
 class Pair implements Comparable<Pair>{
     Integer distance;
     Vertex vertex;
@@ -264,4 +263,10 @@ class Pair implements Comparable<Pair>{
     public int compareTo(Pair p){
         return this.distance.compareTo(p.distance);
     }
- }
+
+    
+    public String toString(){
+        //System.out.println("(" + distance + ", " + vertex.getName() + ")");
+        return ("(" + distance + ", " + vertex.getName() + ")");
+    }
+}

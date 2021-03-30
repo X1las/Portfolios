@@ -70,7 +70,7 @@ public class MatrixGraph {
         }
     }
 }
-
+/*
 class Pair implements Comparable<Pair>{
    Integer distance;
    Integer index;
@@ -85,3 +85,4 @@ class Pair implements Comparable<Pair>{
        return this.distance.compareTo(p.distance);
    }
 }
+*/
