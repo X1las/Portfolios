@@ -5,14 +5,18 @@ public class MinHeap<T extends Comparable<T> >{
     HashMap<T,Integer> positionTable=new HashMap<>();
 
     // root is at index 0
-    ArrayList<T> minheap;
+    private ArrayList<T> minheap;
     private int size;
+
     public MinHeap(){
         this.minheap=new ArrayList<T>();
         this.size=0;
     }
     public int getPosition(T item){
         return positionTable.get(item);
+    }
+    public ArrayList<T> getMinHeap(){
+        return minheap;
     }
     public boolean isEmpty(){
         return size <= 0;
@@ -28,7 +32,7 @@ public class MinHeap<T extends Comparable<T> >{
     }
  
     private void swap(int pos1, int pos2){
-        T dummy= minheap.get(pos1);
+        T dummy = minheap.get(pos1);
 
         minheap.set(pos1, minheap.get(pos2));
         minheap.set(pos2,dummy);

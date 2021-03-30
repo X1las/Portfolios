@@ -24,15 +24,46 @@ public class AdjacencyGraph {
 
     public void MSTPrims(){
         MinHeap<Pair> minheap = new MinHeap<>();
-        
-        for (Vertex vertex : vertices){
-            Pair pair = new Pair(vertex.dist, vertex);
+        ArrayList<Pair> pairs = new ArrayList<>();
+        ArrayList<Vertex> vertexList = new ArrayList<>();
+        for (int i = 0; i < vertices.size(); i++){
+            Vertex currentVertex = vertices.get(i);
+            Pair pair = new Pair(currentVertex, i);
+            pair.setVertex(currentVertex);
+            pairs.add(pair);
+            vertexList.add(currentVertex);
             minheap.insert(pair);
         }
+        //minheap.getMinHeap().get(0).getDist() = 0;
+        Pair startNode = minheap.getMinHeap().get(0);
+        startNode.setDistance(0);
+        startNode.getVertex().setPred(startNode.getVertex());
+        int MSTdist = 0;
+        while(!minheap.isEmpty()){
+            
+            Pair smallest = minheap.extractMin();
+            //minheap.printHeap();
+            Vertex smallestVertex = smallest.getVertex();
+            System.out.println(smallestVertex.name);
+            for(Edge edge : smallestVertex.OutEdges){
+                if (edge.weight < edge.to.dist){
+                    edge.to.setDist(edge.weight);
+                    edge.to.setPred(smallestVertex);
+                    minheap.decreasekey(minheap.getPosition(pairs.get(vertexList.indexOf(edge.to))));
+                }
+            }
+            
+            MSTdist += smallestVertex.dist;
+        }
+        System.out.println(MSTdist);
+
         
+        //minheap.getMinHeap().get(0).dist = 0;
         minheap.printHeap();
         
-        
+        for (Pair pair : pairs){
+            System.out.println("parent " + pair.getVertex().pred.name + " to " + pair.getVertex().name + " Edgeweight: " + pair.getVertex().getDist());
+        }
 
         /*
 
@@ -66,10 +97,12 @@ public class AdjacencyGraph {
         While Q is not empty
             u = Q.poll; // smallest D[u] ---  graph.extractMin()
             for each edge (u,v) (outedge)
+            
                 if weight (u,v) < D[v]
                     dist[v]= w(u,v);
                     pred[v]=u;
                     Q.update(v);//get to right position
+                    minheap.decreasekey(minheap.getPosition())
                 end if
             end for
         End while
@@ -108,7 +141,7 @@ public class AdjacencyGraph {
             }
             MST+=Distance[u.index];
         }
-        System.out.println("Minimum spanning tree Dsitance: " +MST);
+        System.out.println("Minimum spanning tree Distance: " +MST);
         for(int i=0; i< matrixegdegraph.length;i++)
         {
             System.out.println(" parent "+ predecessor[i] + " to " + i + " EdgeWeight: " + Distance[i]);
@@ -192,12 +225,12 @@ public class AdjacencyGraph {
             e.printStackTrace();
         }
     }
-
 }
 
 class Vertex implements Comparable<Vertex> {
     String name;
     ArrayList<Edge> OutEdges;
+    Vertex pred = null;
     Integer dist = Integer.MAX_VALUE;
 
     public Vertex(String id) {
@@ -205,8 +238,21 @@ class Vertex implements Comparable<Vertex> {
         OutEdges = new ArrayList<Edge>();
     }
 
+    public void setPred(Vertex pred){
+        this.pred = pred;
+    }
+
+    public void setDist(Integer dist){
+        this.dist = dist;
+    }
+
+    public Integer getDist(){
+        return dist;
+    }
+
     public String getName() {
         return name;
+        
     }
 
     public void addOutEdge(Edge e) {
@@ -247,18 +293,36 @@ class Edge {
         this.to = to;
         this.weight = cost;
         this.from.addOutEdge(this);
+        this.to.addOutEdge(this);
     }
 }
 
 class Pair implements Comparable<Pair>{
     Integer distance;
     Vertex vertex;
+    Integer key;
  
-    public Pair(Integer distance, Vertex vertex){
-        this.distance = distance;
+    public Pair(Vertex vertex, Integer key){
+        this.distance = vertex.dist;
+        this.key = key;
         this.vertex = vertex;
     }
- 
+    public void setDistance(Integer distance){
+        this.vertex.setDist(distance);
+    }
+
+    public Pair getPair(Vertex vertex){
+        if (this.vertex == vertex) return this;
+        return null;
+    }
+
+    public void setVertex(Vertex vertex){
+        this.vertex = vertex;
+    }
+    public Vertex getVertex(){
+        return this.vertex;
+    }
+
     @Override
     public int compareTo(Pair p){
         return this.distance.compareTo(p.distance);

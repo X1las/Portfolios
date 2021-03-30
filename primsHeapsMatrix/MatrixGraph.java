@@ -21,7 +21,7 @@ public class MatrixGraph {
         MinHeap<Pair> Q = new MinHeap<>();
         PriorityQueue<Pair> PQ = new PriorityQueue<>(); // offer (add) poll (extactmin)
 
-        ArrayList<Pair> VertexPairs=new ArrayList<>();
+        ArrayList<Pair> VertexPairs = new ArrayList<>();
         Arrays.fill(Distance, Integer.MAX_VALUE);
         Arrays.fill(predecessor,-1);
         Arrays.fill(visited,false);
@@ -49,7 +49,7 @@ public class MatrixGraph {
             MST+=Distance[u.index];
         }
         System.out.println("Minimum spanning tree Dsitance: " +MST);
-        for(int i=0; i< matrixegdegraph.length;i++)
+        for(int i=0; i < matrixegdegraph.length;i++)
         {
             System.out.println(" parent "+ predecessor[i] + " to " + i + " EdgeWeight: " + Distance[i]);
         }
