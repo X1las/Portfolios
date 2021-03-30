@@ -48,7 +48,8 @@ public class AdjacencyGraph {
             for(Edge edge : smallestVertex.OutEdges){
                 if (edge.weight < edge.to.dist){
                     edge.to.setDist(edge.weight);
-                    edge.to.setPred(smallestVertex);
+                    edge.to.setPred(edge.from);
+                    System.out.println("pred" + edge.to.getPred().name);
                     minheap.decreasekey(minheap.getPosition(pairs.get(vertexList.indexOf(edge.to))));
                 }
             }
@@ -62,7 +63,7 @@ public class AdjacencyGraph {
         minheap.printHeap();
         
         for (Pair pair : pairs){
-            System.out.println("parent " + pair.getVertex().pred.name + " to " + pair.getVertex().name + " Edgeweight: " + pair.getVertex().getDist());
+            System.out.println("parent " + pair.getVertex().getPred().getName() + " to " + pair.getVertex().name + " Edgeweight: " + pair.getVertex().getDist());
         }
 
         /*
@@ -244,6 +245,13 @@ class Vertex implements Comparable<Vertex> {
 
     public void setDist(Integer dist){
         this.dist = dist;
+    }
+    public void setName(String name){
+        this.name = name;
+    }
+
+    public Vertex getPred(){
+        return this.pred;
     }
 
     public Integer getDist(){
