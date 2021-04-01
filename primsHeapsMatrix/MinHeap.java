@@ -5,7 +5,7 @@ public class MinHeap<T extends Comparable<T> >{
     HashMap<T,Integer> positionTable=new HashMap<>();
 
     // root is at index 0
-    private ArrayList<T> minheap;
+    public ArrayList<T> minheap;
     private int size;
 
     public MinHeap(){
@@ -51,6 +51,9 @@ public class MinHeap<T extends Comparable<T> >{
             swap(currentpos,Parent(currentpos));
             currentpos=Parent(currentpos);
         }
+    }
+    public void updateNode(int pos){
+       
     }
 
     public T viewMin(){
