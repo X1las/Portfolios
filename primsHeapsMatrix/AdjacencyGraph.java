@@ -9,6 +9,9 @@ import java.util.*;
 
 public class AdjacencyGraph {
     ArrayList<Vertex> vertices;
+    ArrayList<MSTNode> mstNodes = new ArrayList<>();
+
+
     HashMap<Vertex, Integer> vertexMap= new HashMap<>();
 
 
@@ -24,105 +27,52 @@ public class AdjacencyGraph {
         return this.vertices;
     }
 
+
     public void MSTPrims(){
         MinHeap<Pair> minheap = new MinHeap<>();
-        ArrayList<Pair> pairs = new ArrayList<>();
+        //ArrayList<Pair> pairs = new ArrayList<>();
+        HashMap<Vertex,Pair> pairs = new HashMap<>();
         ArrayList<Vertex> vertexList = new ArrayList<>();
         for (int i = 0; i < vertices.size(); i++){
             Vertex currentVertex = vertices.get(i);
-            Pair pair = new Pair(vertexMap.get(currentVertex), currentVertex.getDist());
-            //pair.setVertex(currentVertex);
-            pairs.add(pair);
+            //Pair pair = new Pair(vertexMap.get(currentVertex), currentVertex.getDist());
+            Pair pair = new Pair(currentVertex, currentVertex.getDist());
+            pair.setVertex(currentVertex);
+            pairs.put(currentVertex, pair);
             vertexList.add(currentVertex);
             minheap.insert(pair);
-            //System.out.println(vertices.get(i).name);
         }
-        //minheap.getMinHeap().get(0).getDist() = 0;
+    
         Pair startNode = minheap.getMinHeap().get(0);
         startNode.setDistance(0);
-        //startNode.getVertex().setPred(startNode.getVertex());
-        int MSTdist = 0;
+        startNode.getVertex().setPred(startNode.getVertex());
         while(!minheap.isEmpty()){
-            
             Pair extractedNode = minheap.extractMin();
-            //minheap.printHeap();
-            Vertex extractedVertex = vertexMap.get()
-            
-            //extractedNode.getVertex();
-            //System.out.println(smallestVertex.name);
-            for(Edge edge : extractedVertex.OutEdges){
-                // set the distance of pair that has the .to edge.
-                //int index = vertexList.indexOf(edge.to);
-                
-            }
-
-
+            Vertex extractedVertex = extractedNode.getVertex();
+            MSTNode mstNode = new MSTNode(extractedVertex, extractedVertex.getPred(), extractedNode.distance);
+            mstNodes.add(mstNode);
             for(Edge edge : extractedVertex.OutEdges){
                 if (edge.weight < edge.to.dist){
                     edge.to.setDist(edge.weight);
                     edge.to.setPred(edge.from);
-                    System.out.println(pairs.get(vertexList.indexOf(edge.to)));
-                    System.out.println(minheap.minheap.get(minheap.getPosition(pairs.get(vertexList.indexOf(edge.to)))));
-                    //System.out.println("pred" + edge.to.getPred().name);
-                    minheap.decreasekey(minheap.getPosition(pairs.get(vertexList.indexOf(edge.to))));
+                    
+                    Pair currentPair = pairs.get(edge.to);
+                    currentPair.setDistance(edge.to.getDist());
+                    int pos = minheap.getPosition(currentPair);
+                    minheap.decreasekey(pos);
                 }
             }
             
-            MSTdist += extractedVertex.dist;
         }
-        System.out.println(MSTdist);
-
-        
-        //minheap.getMinHeap().get(0).dist = 0;
-        minheap.printHeap();
-        
-        for (Pair pair : pairs){
-            System.out.println("parent " + pair.getVertex().getPred().getName() + " to " + pair.getVertex().name + " Edgeweight: " + pair.getVertex().getDist());
+               
+        int total = 0;
+        for (MSTNode node : mstNodes){
+            System.out.println(node);
+            total += node.distance;
         }
-
-        /*
-
-
-
-         https://algorithms.tutorialhorizon.com/prims-minimum-spanning-tree-mst-using-adjacency-list-and-min-heap/
-    1. Create min Heap of size = no of vertices.
-    2. Create a heapNode for each vertex which will store two information. a). vertex b). key
-    3. Use minHeap[] to keep track of the vertices which are currently in min heap.
-    4. Create key[] to keep track of key value for each vertex. (keep updating it as heapNode key for each vertex)
-    5. For each heapNode, Initialize key as MAX_VAL except the heapNode for the first vertex for which key will 0. (Start from first vertex).
-    6. Insert all the heapNodes into min heap. inHeap[v] = true for all vertices.
-    7. while minHeap is not empty
-        a) Extract the min node from the heap, say it vertex u and add it to the MST.
-        b) Decrease key: Iterate through all the adjacent vertices of above vertex u and if adjacent vertex (say it’s v) is still part of inHeap[] (means not in MST) and key of vertex v> u-v weight then key of vertex v = u-v
-    8. We will use Result object to store the result of each vertex. Result object will store 2 information’s.
-        a) First the parent vertex, means from which vertex you can visit this vertex. Example if for vertex v, you have included edge u-v in mst[] then vertex u will be the parent vertex.
-        b) Second weight of edge u-v. If you add all these weights for all the vertices in mst[]  then you will get Minimum spanning tree weight.
-            
-        */
+        System.out.println("total distance: " + total + " km");
+        System.out.printf(Locale.US, "total price:    %,d kroner %n", 100000*total);
         
-        /*
-        Prims(G):
-        Q=Ø (empty min-heap/priorityQueue)
-        For each vertex v in G
-            dist[v]=infinity;
-            pred[v]=null;
-            Q.offer(D[v],v);    // adding (for some reason) -- graph.insert()
-        dist[start]=0;
-        Q.update(start);
-        While Q is not empty
-            u = Q.poll; // smallest D[u] ---  graph.extractMin()
-            for each edge (u,v) (outedge)
-            
-                if weight (u,v) < D[v]
-                    dist[v]= w(u,v);
-                    pred[v]=u;
-                    Q.update(v);//get to right position
-                    minheap.decreasekey(minheap.getPosition())
-                end if
-            end for
-        End while
-        */
-     
     }
 
 
@@ -202,6 +152,24 @@ public class AdjacencyGraph {
         }
     }
 }
+
+class MSTNode {
+    Vertex self;
+    Vertex parent;
+    Integer distance;
+
+    public MSTNode(Vertex self, Vertex parent, Integer distance){
+        this.self = self;
+        this.parent = parent;
+        this.distance = distance;
+    }
+
+    public String toString(){
+        return String.format("From: %-15s to: %-15s distance: %-2s km" , parent.getName(), self.getName(), Integer.toString(distance));
+    }
+
+}
+
 
 class Vertex implements Comparable<Vertex> {
     String name;
@@ -285,17 +253,23 @@ class Edge {
 }
 
 class Pair implements Comparable<Pair>{
-    Integer distance;
-    Integer vertex;
+    Integer distance = Integer.MAX_VALUE;
+    Vertex vertex;
     Integer key;
  
-    public Pair(Integer vertex, Integer distance){
+    public Pair(Vertex vertex, Integer distance){
         //this.distance = vertex.getDist();
         this.distance = distance;
         this.vertex = vertex;
     }
 
+    public void setVertex(Vertex vertex){
+        this.vertex = vertex;
+    }
     
+    public Vertex getVertex(){
+        return vertex;
+    }
 
     public void setDistance(Integer distance){
         //this.vertex.setDist(distance);
@@ -313,9 +287,9 @@ class Pair implements Comparable<Pair>{
         return this.distance.compareTo(p.distance);
     }
 
-    /*
+    
     public String toString(){
         //System.out.println("(" + distance + ", " + vertex.getName() + ")");
         return ("(" + distance + ", " + vertex.getName() + ")");
-    }*/
+    }
 }
