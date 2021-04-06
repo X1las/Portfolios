@@ -52,9 +52,6 @@ public class MinHeap<T extends Comparable<T> >{
             currentpos=Parent(currentpos);
         }
     }
-    public void updateNode(int pos){
-       
-    }
 
     public T viewMin(){
         return minheap.get(0);
@@ -65,7 +62,7 @@ public class MinHeap<T extends Comparable<T> >{
         boolean rightsmaller = rightChild(pos)<size
                 && (minheap.get(rightChild(pos)).compareTo(minheap.get(pos))<0);
         return leftsmaller || rightsmaller;
-    }
+    }   
     public void increasekey(int pos){
         int currentpos=pos;
         while (movedown(currentpos))
@@ -85,11 +82,10 @@ public class MinHeap<T extends Comparable<T> >{
     public T extractMin(){ // poll
         T min = minheap.get(0);    
         minheap.set(0, minheap.get(size-1)); 
-        positionTable.put(minheap.get(0),0); // O(n)
+        positionTable.put(minheap.get(0),0);
         size--;
         
-        
-        increasekey(0); // O(n²)
+        increasekey(0); // O(n²) for bubble sort
         return min; 
     }
     public void printHeap()

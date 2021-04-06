@@ -20,45 +20,59 @@ public class AdjacencyGraph {
     public void addVertex(Vertex v) {
         vertices.add(v);
     }
-    // cats r cute that's true tho
-    
+
+    // Function that will create a minimum spanning tree based on Prim's algorithm
     public void MSTPrims(){
-        ArrayList<MSTNode>   mstNodes = new ArrayList<>();      // 1
-        MinHeap<Pair>        minheap  = new MinHeap<>();        // 1
-        HashMap<Vertex,Pair> pairs    = new HashMap<>();        // 1
-        for (int i = 0; i < vertices.size(); i++){ //            V log V
+        // ArrayList represting our minimum spanning tree
+        MSTNode[] mst = new MSTNode[vertices.size()];                 // O(1)
+        //ArrayList<MSTNode>   mst     = new ArrayList<>();           // O(1)
+        // Using given MinHeap with pairs of vertices and their current distance
+        MinHeap<Pair>        minheap = new MinHeap<>();             // O(1)
+        // A HashMap to keep Pairs from the minheap connected to their Vertex. Make loop-up quicker 
+        HashMap<Vertex,Pair> pairs   = new HashMap<>();             // O(1)
+        // Loops through all vertices and adds them and their attributes to different data structures
+        for (int i = 0; i < vertices.size(); i++){                  // O(V log V)
             Vertex currentVertex = vertices.get(i);
             Pair pair = new Pair(currentVertex, currentVertex.dist);
             pair.setVertex(currentVertex);
             pairs.put(currentVertex, pair);
             minheap.insert(pair);
         }
-    
-        Pair startNode = minheap.getMinHeap().get(0);
-        startNode.setDistance(0);
-        startNode.vertex.setPred(startNode.vertex);
-        while(!minheap.isEmpty()){ 
-            Pair    extractedNode = minheap.extractMin();   // O(v + v²)
-            Vertex  extractedVertex = extractedNode.vertex; // O(1)
-            MSTNode mstNode = new MSTNode(extractedVertex, extractedVertex.pred, extractedNode.distance); // O(1)
-            mstNodes.add(mstNode); // O(v)
-            for(Edge edge : extractedVertex.OutEdges){  // O(e)
+        
+        // Choosing a starting node as setting its distance to 0 and predecessor to itself
+        Pair startNode = minheap.getMinHeap().get(0);               // O(1)
+        startNode.setDistance(0);                                   // O(1)
+        startNode.vertex.setPred(startNode.vertex);                 // O(1)
+        int mst_pos = 0;                                            // O(1)
+        // 
+        while(!minheap.isEmpty()){                                  // Total: O(V*(edge*log(V)) + V*log(V))
+            // Extracting minimum vertex
+            Pair    extractedNode = minheap.extractMin();           // O(log V)
+            Vertex  extractedVertex = extractedNode.vertex;         // O(1)
+            // Add to MST
+            MSTNode mstNode = new MSTNode(extractedVertex, extractedVertex.pred, extractedNode.distance); // O(1)                                    
+            mst[mst_pos] = mstNode;                                 // O(1)
+            mst_pos++;                                              // O(1)
+            // Go through each edge connected to current extracted node to update current distance and predecessor dependent on whether current distance is shorter
+            for(Edge edge : extractedVertex.OutEdges){              // Total: O(edge*log(V))
                 if (edge.weight < edge.to.dist){
-                    edge.to.setDist(edge.weight);   // O(1)
-                    edge.to.setPred(edge.from);     // O(1)
-                    Pair currentPair = pairs.get(edge.to); 
-                    currentPair.setDistance(edge.to.dist);
-                    int pos = minheap.getPosition(currentPair);
-                    minheap.decreasekey(pos);
+                    edge.to.setDist(edge.weight);                   // O(1)
+                    edge.to.setPred(edge.from);                     // O(1)
+                    Pair currentPair = pairs.get(edge.to);          // O(1)
+                    currentPair.setDistance(edge.to.dist);          // O(1)
+                    int pos = minheap.getPosition(currentPair);     // O(1)
+                    minheap.decreasekey(pos);                       // O(log(V)) since it's just a bubble sort?
                 }
             }
         }
                
+        // Adding together distances from the minimum spanning tree
         int total = 0;
-        for (MSTNode node : mstNodes){
+        for (MSTNode node : mst){      // O(V)
             System.out.println(node);
             total += node.distance;
         }
+        // Printing the tree and costs
         System.out.println("total distance: " + total + " km");
         System.out.printf(Locale.US, "total price:    %,d kroner %n", 100000*total);
     }
@@ -72,39 +86,45 @@ public class AdjacencyGraph {
         Edge e = new Edge(f, t, w);
     }
 
+
+    // Function that takes a CSV file and adds the towns to a list of vertices as well as adding edges between them
     public void createFromFile(String file) {
         String line    = "";
         String splitBy = ",";
         try{
-            // parsing a CSV file into BufferedReader class constructor
+            // Using BufferedReader to read CSV file. Inspired by: https://www.javatpoint.com/how-to-read-csv-file-in-java
             BufferedReader br = new BufferedReader(new FileReader(file));
-            while ((line = br.readLine()) != null) // returns a Boolean value
-            {
-                
-                String[] connection = line.split(splitBy); // use comma as separator
-                
+            while ((line = br.readLine()) != null)
+            {    
+                String[] connection = line.split(splitBy); 
+
+                // The fromVertex is the towns on the left side of the given table. toVertex is the right side.
                 Vertex fromVertex = null;
                 Vertex toVertex   = null;
-                boolean from_alreadyInList = true;
-                boolean to_alreadyInList   = true;
+                boolean from_notAlreadyInList = true;
+                boolean to_notAlreadyInList   = true;
+
                 for (Vertex vertex : vertices) {
+                    // If there is no vertex with the same name as the town, without creating a new vertex. There will just be new edges added to the vertices
                     if (vertex.name.equals(connection[0])){
                         fromVertex = vertex;
-                        from_alreadyInList = false;
+                        from_notAlreadyInList = false;
                     }
                     if (vertex.name.equals(connection[1])){
                         toVertex = vertex;
-                        to_alreadyInList = false;
+                        to_notAlreadyInList = false;
                     }
                 }
-                if (from_alreadyInList){
+                // If the the towns have not yet been made verticies, we make new vertices with the currents towns' names.
+                if (from_notAlreadyInList){
                     fromVertex = new Vertex(connection[0]);
                     vertices.add(fromVertex);
                 }
-                if (to_alreadyInList){
+                if (to_notAlreadyInList){
                     toVertex = new Vertex(connection[1]);
                     vertices.add(toVertex);
                 }
+                // Adding edges to the current from/to vertices
                 if (fromVertex!=null && toVertex!=null) {         
                     addEdge(fromVertex,toVertex,  Integer.valueOf(connection[2]));
                     addEdge(toVertex,  fromVertex,Integer.valueOf(connection[2]));
@@ -129,6 +149,7 @@ public class AdjacencyGraph {
     }
 }
 
+// "Nodes" meant to represent a vertex and its connection to its parent to add to a mininimum spanning tree
 class MSTNode {
     Vertex self;
     Vertex parent;
@@ -141,12 +162,12 @@ class MSTNode {
     }
 
     public String toString(){
-        return String.format("From: %-15s to: %-15s distance: %-2s km" , parent.getName(), self.getName(), Integer.toString(distance));
+        return String.format("From: %-15s to: %-15s distance: %-2s km" , parent.name, self.name, Integer.toString(distance));
     }
 
 }
 
-
+// Vertices as given by lecutrer. Added some setters
 class Vertex implements Comparable<Vertex> {
     String name;
     ArrayList<Edge> OutEdges;
@@ -169,36 +190,17 @@ class Vertex implements Comparable<Vertex> {
         this.name = name;
     }
 
-    public Vertex getPred(){
-        return this.pred;
-    }
-
-    public Integer getDist(){
-        return dist;
-    }
-
-    public String getName() {
-        return name;
-        
-    }
-
     public void addOutEdge(Edge e) {
         OutEdges.add(e);
     }
-
-    public boolean compareByName(String name) {
-        if (this.name.equals(name))
-            return true;
-        return false;
-    }
-
+    /*
     @Override
     public boolean equals(Object vertex) {
         if (this == vertex)
             return true;
-
         return false;
     }
+    */
 
     @Override
     public int compareTo(Vertex o) {
@@ -211,9 +213,7 @@ class Vertex implements Comparable<Vertex> {
 }
 
 
-
-
-
+// Edge as given by lecturer
 class Edge {
     Integer weight;
     Vertex from;
@@ -223,49 +223,35 @@ class Edge {
         this.from = from;
         this.to = to;
         this.weight = cost;
-        this.from.addOutEdge(this);
+        this.from.addOutEdge(this); 
         this.to.addOutEdge(this);
     }
 }
 
+// A pair consisting of a vertex and its current distance. Used for prims in order to keep track of each vertex' current distance
 class Pair implements Comparable<Pair>{
     Integer distance = Integer.MAX_VALUE;
     Vertex vertex;
-    Integer key;
  
     public Pair(Vertex vertex, Integer distance){
-        //this.disance = vertex.getDist();
         this.distance = distance;
-        this.vertex = vertex;
+        this.vertex   = vertex;
     }
 
     public void setVertex(Vertex vertex){
         this.vertex = vertex;
     }
-    
-    public Vertex getVertex(){
-        return vertex;
-    }
-
+   
     public void setDistance(Integer distance){
-        //this.vertex.setDist(distance);
         this.distance = distance;
     }
-
-    //public Pair getPair(Vertex vertex){
-      //  if (this.vertex == vertex) return this;
-       // return null;
-   // }
-
 
     @Override
     public int compareTo(Pair p){
         return this.distance.compareTo(p.distance);
     }
-
     
     public String toString(){
-        //System.out.println("(" + distance + ", " + vertex.getName() + ")");
-        return ("(" + distance + ", " + vertex.getName() + ")");
+        return ("(" + distance + ", " + vertex.name + ")");
     }
 }
