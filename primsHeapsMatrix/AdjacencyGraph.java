@@ -25,7 +25,6 @@ public class AdjacencyGraph {
     public void MSTPrims(){
         // ArrayList represting our minimum spanning tree
         MSTNode[] mst = new MSTNode[vertices.size()];                 // O(1)
-        //ArrayList<MSTNode>   mst     = new ArrayList<>();           // O(1)
         // Using given MinHeap with pairs of vertices and their current distance
         MinHeap<Pair>        minheap = new MinHeap<>();             // O(1)
         // A HashMap to keep Pairs from the minheap connected to their Vertex. Make loop-up quicker 
