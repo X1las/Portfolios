@@ -84,13 +84,13 @@ public class MinHeap<T extends Comparable<T> >{
     }
     public T extractMin(){ // poll
         T min = minheap.get(0);    
-        minheap.set(0, minheap.get(size-1));
-        positionTable.put(minheap.get(0),0);
+        minheap.set(0, minheap.get(size-1)); 
+        positionTable.put(minheap.get(0),0); // O(n)
         size--;
         
         
-        increasekey(0);
-        return min;
+        increasekey(0); // O(n²)
+        return min; 
     }
     public void printHeap()
     {   

@@ -9,8 +9,7 @@ public class MatrixGraph {
         matrixegdegraph=new int[vertices][vertices];
         matrixweightgraph =new int[vertices][vertices];
     }
-    public void addEdge(int from, int to, int weight)
-    {
+    public void addEdge(int from)    {
         matrixegdegraph[from][to]=1;
         matrixweightgraph[from][to]=weight;
     }
