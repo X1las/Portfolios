@@ -30,16 +30,12 @@ public class AdjacencyGraph {
 
     public void MSTPrims(){
         MinHeap<Pair> minheap = new MinHeap<>();
-        //ArrayList<Pair> pairs = new ArrayList<>();
         HashMap<Vertex,Pair> pairs = new HashMap<>();
-        ArrayList<Vertex> vertexList = new ArrayList<>();
-        for (int i = 0; i < vertices.size(); i++){
+        for (int i = 0; i < vertices.size(); i++){ //            V log V
             Vertex currentVertex = vertices.get(i);
-            //Pair pair = new Pair(vertexMap.get(currentVertex), currentVertex.getDist());
             Pair pair = new Pair(currentVertex, currentVertex.getDist());
             pair.setVertex(currentVertex);
             pairs.put(currentVertex, pair);
-            vertexList.add(currentVertex);
             minheap.insert(pair);
         }
     
@@ -55,14 +51,12 @@ public class AdjacencyGraph {
                 if (edge.weight < edge.to.dist){
                     edge.to.setDist(edge.weight);
                     edge.to.setPred(edge.from);
-                    
                     Pair currentPair = pairs.get(edge.to);
                     currentPair.setDistance(edge.to.getDist());
                     int pos = minheap.getPosition(currentPair);
                     minheap.decreasekey(pos);
                 }
             }
-            
         }
                
         int total = 0;
