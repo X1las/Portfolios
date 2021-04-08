@@ -38,16 +38,16 @@ public class AdjacencyGraph {
         startNode.vertex.setPred(startNode.vertex);                 
         int mst_pos = 0;                                            
         // 
-        while(!minheap.isEmpty()){                                  // Total: O(E*log(V) + V*log(V)) = 
-            // Extracting minimum vertex
+        while(!minheap.isEmpty()){                                  // Total: O(E*log(V) + V*log(V)) = ((E+V)*log(V))
+            // Extracting minimum vertex                            
             Pair    extractedNode = minheap.extractMin();           // O(log V)
             Vertex  extractedVertex = extractedNode.vertex;         
-            // Add to MST
+            // Add to MST                                           
             MSTNode mstNode = new MSTNode(extractedVertex, extractedVertex.pred, extractedNode.distance);                                    
             mst[mst_pos] = mstNode;                                 
             mst_pos++;                                              
             // Go through each edge connected to current extracted node to update current distance and predecessor dependent on whether current distance is shorter
-            for(Edge edge : extractedVertex.OutEdges){              // Total: O(E*log(V))
+            for(Edge edge : extractedVertex.OutEdges){              // Total: O(edge*log(V))
                 if (edge.weight < edge.to.dist){
                     edge.to.setDist(edge.weight);                   
                     edge.to.setPred(edge.from);                     
@@ -225,7 +225,7 @@ class Edge {
 class Pair implements Comparable<Pair>{
     Integer distance = Integer.MAX_VALUE;
     Vertex vertex;
- 
+
     public Pair(Vertex vertex, Integer distance){
         this.distance = distance;
         this.vertex   = vertex;
@@ -234,7 +234,7 @@ class Pair implements Comparable<Pair>{
     public void setVertex(Vertex vertex){
         this.vertex = vertex;
     }
-   
+
     public void setDistance(Integer distance){
         this.distance = distance;
     }
